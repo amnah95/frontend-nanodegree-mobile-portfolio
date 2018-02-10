@@ -461,7 +461,7 @@ var resizePizzas = function(size) {
       newwidth = 50;
       break;
       default:
-      console.log ("bug in sizeSwitcher")
+      console.log ("bug in sizeSwitcher");
     }
 
     var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
@@ -514,7 +514,7 @@ var frame = 0;
 function updatePositions() {
   frame++;
   var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  var thePerformance = window.performance
+  var thePerformance = window.performance;
   var items = document.querySelectorAll('.mover');
   var number = Math.sin(scrollTop/1250);
 
@@ -527,9 +527,9 @@ function updatePositions() {
     phases.push(items[i].basicLeft + 100 * phase + 'px');
   }
   // tried to use transform instead of left, but did not work out
-  for (var i = 0; i < items.length; i++){
+  for (var j = 0; j < items.length; j++){
     // document.body.scrollTop is no longer supported in Chrome.
-    items[i].style.left = phases[i];
+    items[j].style.left = phases[j];
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
