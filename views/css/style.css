@@ -30,8 +30,10 @@ form {
 }
 
 .mover {
+  /*added will change*/
+  will-change: transform;
   position: fixed;
-  width: 256px;
+  width: 73.33px;
   z-index: -1;
 }
 

@@ -447,12 +447,26 @@ var resizePizzas = function(size) {
     return dx;
   }
 
-  // Iterates through pizza elements on the page and changes their widths
+  // Iterates using switch and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+
+    switch (size) {
+      case "1":
+      newwidth = 25;
+      break;
+      case "2":
+      newwidth = 33.3;
+      break;
+      case "3":
+      newwidth = 50;
+      break;
+      default:
+      console.log ("bug in sizeSwitcher")
+    }
+
+    var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
+    for (var i = 0; i < randomPizzas.length; i++) {
+      randomPizzas[i].style.width = newwidth + "%";
     }
   }
 
@@ -484,14 +498,14 @@ console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "
 var frame = 0;
 
 // Logs the average amount of time per 10 frames needed to move the sliding background pizzas on scroll.
-function logAverageFrame(times) {   // times is the array of User Timing measurements from updatePositions()
-  var numberOfEntries = times.length;
-  var sum = 0;
-  for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
-    sum = sum + times[i].duration;
-  }
-  console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
-}
+// function logAverageFrame(times) {   // times is the array of User Timing measurements from updatePositions()
+//   var numberOfEntries = times.length;
+//   var sum = 0;
+//   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
+//     sum = sum + times[i].duration;
+//   }
+//   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
+// }
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
@@ -499,23 +513,32 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
-  window.performance.mark("mark_start_frame");
-
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var thePerformance = window.performance
   var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
+  var number = Math.sin(scrollTop/1250);
+
+  thePerformance.mark("mark_start_frame");
+  
+  var phases = [];
+  for (var i = 0; i < items.length; i++){
     // document.body.scrollTop is no longer supported in Chrome.
-    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    var phase = Math.sin((scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    phase = number + (i % 5);
+    phases.push(items[i].basicLeft + 100 * phase + 'px');
+  }
+  // tried to use transform instead of left, but did not work out
+  for (var i = 0; i < items.length; i++){
+    // document.body.scrollTop is no longer supported in Chrome.
+    items[i].style.left = phases[i];
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  thePerformance.mark("mark_end_frame");
+  thePerformance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
   if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
+    var timesToUpdatePosition = thePerformance.getEntriesByName("measure_frame_duration");
+    // logAverageFrame(timesToUpdatePosition);
   }
 }
 
@@ -526,15 +549,20 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  var pizzaElement = document.querySelector("#movingPizzas1");
+  // create array of elements
+  var elements = [];
+  for (var i = 0; i < 30; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    elem.style.height = "100px";
-    elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    elements.push(elem);
+  }
+  //append them all at once
+  for (var i = 0; i < elements.length; i++) {
+      pizzaElement.appendChild(elements[i]);
   }
   updatePositions();
 });
