@@ -561,8 +561,8 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.push(elem);
   }
   //append them all at once
-  for (var i = 0; i < elements.length; i++) {
-      pizzaElement.appendChild(elements[i]);
+  for (var j = 0; j < elements.length; j++) {
+      pizzaElement.appendChild(elements[j]);
   }
   updatePositions();
 });
