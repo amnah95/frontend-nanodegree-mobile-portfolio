@@ -1,9 +1,12 @@
 # Optmizing Mobile Portfolio
 This goal of this project is to optimize a provided website with a number of optimization- and performance-related issues so that it achieves a target PageSpeed score and runs at 60 frames per second.
 
+## Getting Started
+To check the first part of the project, open Index.html at your browser
+To check the second part of the project, open pizza.html at your browser
 ## The Changes 
 ### First Part
-1- Inlined small css files.
+1- Inlined all css files.
 2- Inlined small JS files.
 3- All rescource are being uploded locallay.
 4- Added async attirbute to extrenal JS.

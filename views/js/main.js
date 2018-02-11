@@ -516,14 +516,13 @@ function updatePositions() {
   var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
   var thePerformance = window.performance;
   var items = document.querySelectorAll('.mover');
-  var number = Math.sin(scrollTop/1250);
 
   thePerformance.mark("mark_start_frame");
   
   var phases = [];
   for (var i = 0; i < items.length; i++){
     // document.body.scrollTop is no longer supported in Chrome.
-    phase = number + (i % 5);
+    var phase = Math.sin((scrollTop / 1250) + (i % 5));
     phases.push(items[i].basicLeft + 100 * phase + 'px');
   }
   // tried to use transform instead of left, but did not work out
@@ -552,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var pizzaElement = document.querySelector("#movingPizzas1");
   // create array of elements
   var elements = [];
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < (inner.height/s*cols); i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
