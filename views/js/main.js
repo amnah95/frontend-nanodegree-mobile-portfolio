@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var pizzaElement = document.querySelector("#movingPizzas1");
   // create array of elements
   var elements = [];
-  for (var i = 0; i < (inner.height/s*cols); i++) {
+  for (var i = 0; i < (window.innerHeight/s*cols); i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
